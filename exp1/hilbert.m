@@ -11,28 +11,51 @@ clear workspace
 
 % Dimension number of the equations
 % n can be randomly changed
-n=10;
+for n=10:15
+    % Hilbert matrix
+    % Size: n x n
+    gaussH=hilb(n);
+    choleH=hilb(n);
+    tikhoH=hilb(n);
+    conjgradH=hilb(n);
+    gmresH=hilb(n);
+    
+    % X, size: n x 1
+    X=ones([n,1]);
+    gauss_bn=gaussH*X;
+    chole_bn=choleH*X;
+    tikho_bn=tikhoH*X;
+    conjgrad_bn=conjgradH*X;
+    gmres_bn=gmresH*X;
 
-% Hilbert matrix and X
-% Size: n x n
-H=zeros(n);
-X=zeros([n,1]);
-for i=1:n
-    X(i)=1;
-    for j=1:n
-        H(i,j)=1/(i+j-1);
-    end
+    fprintf("n=%d\n", n);
+    
+    % Solve in gauss elimination solution
+    [Y1]=gauss(gaussH,gauss_bn,n);
+    fprintf("Y1=\n");
+    disp(Y1);
+    
+
+    % Solve in Cholesky Factorization
+    Y2=cholesky(choleH,chole_bn,n);
+    fprintf("Y2=\n");
+    disp(Y2);
+
+    % Solve in Tikhonov Regularization
+    Y3=tikhonov(tikhoH,tikho_bn,n);
+    fprintf("Y3=\n");
+    disp(Y3);
+
+    % Solve in Conjugate Gradient Methods
+    Y4=cgs(conjgradH,conjgrad_bn,9.3e-10);
+    fprintf("Y4=\n");
+    disp(Y4);
+
+    % Solve in GMRES Methods
+    Y5=gmres(gmresH,gmres_bn);
+    fprintf("Y5=\n");
+    disp(Y5);
 end
-bn=H*X;
-
-
-% Solve in gauss elimination solution
-[Y1]=gauss(H,bn,n);
-
-% Solve in Cholesky Factorization
-L=chol(H);
-Y2=L\(L'\bn);
-
 
 
 

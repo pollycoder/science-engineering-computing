@@ -5,7 +5,6 @@
 % b: initial vector
 % n: scale of the matrix
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Gauss elimination solution
 function [x]=gauss(A,b,n)
     [Ax,bx]=gaussElimination(A,b,n);
     [X]=gaussBack(Ax,bx,n);
