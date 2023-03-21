@@ -15,6 +15,7 @@ res_arr2=[];
 res_arr3=[];
 res_arr4=[];
 res_arr5=[];
+step4_arr=[];
 % Dimension number of the equations
 % n can be randomly changed
 for n=10:15
@@ -58,7 +59,7 @@ for n=10:15
     fprintf("Residual 3 = %d\n", res3);
 
     % Solve in Conjugate Gradient Methods
-    Y4=cgs(conjgradH,conjgrad_bn,9.3e-10);
+    [Y4,step4]=cg(conjgradH,conjgrad_bn,n,9.3e-10);
     res4=mse(Y4-X);
     fprintf("Y4=\n");
     disp(Y4);
@@ -78,6 +79,7 @@ for n=10:15
     res_arr3(end+1)=res3;
     res_arr4(end+1)=res4;
     res_arr5(end+1)=res5;
+    step4_arr(end+1)=step4;
 end
 
 % Plot
@@ -92,7 +94,7 @@ ylim([0,0.001]);
 set(gca,'XTick',10:1:15);
 xlabel('n');
 ylabel('Res');
-title('各种求解方法的误差随n的变化关系图(1E-03量级)');
+title('各种求解方法的误差随n的变化关系(1E-03量级)');
 
 subplot(2,3,2);
 plot(n_arr,res_arr1,":",'LineWidth',2);hold on
@@ -105,7 +107,7 @@ ylim([0,0.01]);
 set(gca,'XTick',10:1:15);
 xlabel('n');
 ylabel('Res');
-title('各种求解方法的误差随n的变化关系图(1E-02量级)');
+title('各种求解方法的误差随n的变化关系(1E-02量级)');
 
 subplot(2,3,3);
 plot(n_arr,res_arr1,":",'LineWidth',2);hold on
@@ -118,7 +120,7 @@ ylim([0,0.1]);
 set(gca,'XTick',10:1:15);
 xlabel('n');
 ylabel('Res');
-title('各种求解方法的误差随n的变化关系图(1E-01量级)');
+title('各种求解方法的误差随n的变化关系(1E-01量级)');
 
 subplot(2,3,4);
 plot(n_arr,res_arr1,":",'LineWidth',2);hold on
@@ -131,7 +133,7 @@ ylim([0,1]);
 set(gca,'XTick',10:1:15);
 xlabel('n');
 ylabel('Error');
-title('各种求解方法的误差随n的变化关系图(1E+00量级)');
+title('各种求解方法的误差随n的变化关系(1E+00量级)');
 
 subplot(2,3,5);
 plot(n_arr,res_arr1,":",'LineWidth',2);hold on
@@ -144,7 +146,7 @@ ylim([0,10]);
 set(gca,'XTick',10:1:15);
 xlabel('n');
 ylabel('Error');
-title('各种求解方法的误差随n的变化关系图(1E+01量级)');
+title('各种求解方法的误差随n的变化关系(1E+01量级)');
 
 subplot(2,3,6);
 plot(n_arr,res_arr1,":",'LineWidth',2);hold on
@@ -157,9 +159,9 @@ ylim([0,10000000]);
 set(gca,'XTick',10:1:15);
 xlabel('n');
 ylabel('Error');
-title('各种求解方法的误差随n的变化关系图(1E+07量级)');
+title('各种求解方法的误差随n的变化关系(1E+07量级)');
 
 
-sgtitle('不同量级下各种求解方法的误差随矩阵阶数的变化关系图');
+sgtitle('不同量级下各种求解方法的性能随矩阵阶数的变化关系图');
 
 
