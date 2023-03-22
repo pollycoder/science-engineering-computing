@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Conjugate Gradient Methods
+%% Conjugate Gradient Methods
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [x,steps]=cg(A,b,n,eps)
     x0=zeros([n,1]);
@@ -25,6 +25,6 @@ function [x,steps]=cg(A,b,n,eps)
         x0=x1;
     end
     x=x0;
-    fprintf("Iteration stopped with the eps = %f\n", eps);
+    fprintf("Iteration stopped with eps = %f\n", eps);
     fprintf("Steps = %d\n", steps);
 end

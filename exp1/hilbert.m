@@ -7,12 +7,13 @@
 %      and compare the result
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clc
-clear workspace
+clear
 
 n_arr=[];
 res_arr1=[];
 res_arr2=[];
 res_arr3=[];
+res_arr31=[];
 res_arr4=[];
 res_arr5=[];
 step4_arr=[];
@@ -23,7 +24,8 @@ for n=10:15
     % Size: n x n
     gaussH=hilb(n);
     choleH=hilb(n);
-    tikhoH=hilb(n);
+    tikGaussH=hilb(n);
+    tikCholH=hilb(n);
     conjgradH=hilb(n);
     gmresH=hilb(n);
     
@@ -31,7 +33,8 @@ for n=10:15
     X=ones([n,1]);
     gauss_bn=gaussH*X;
     chole_bn=choleH*X;
-    tikho_bn=tikhoH*X;
+    tikGauss_bn=tikGaussH*X;
+    tikChol_bn=tikCholH*X;
     conjgrad_bn=conjgradH*X;
     gmres_bn=gmresH*X;
 
@@ -52,11 +55,18 @@ for n=10:15
     fprintf("Residual 2 = %d\n", res2);
 
     % Solve in Tikhonov Regularization
-    Y3=tikhonov(tikhoH,tikho_bn,n);
+    % First is gauss, then cholesky
+    Y3=tikhonov_gauss(tikGaussH,tikGauss_bn,n);
     res3=mse(Y3-X);
     fprintf("Y3=\n");
     disp(Y3);
     fprintf("Residual 3 = %d\n", res3);
+
+    Y31=tikhonov_chol(tikCholH,tikChol_bn,n);
+    res31=mse(Y31-X);
+    fprintf("Y31=\n");
+    disp(Y31);
+    fprintf("Residual 3-1 = %d\n", res31);
 
     % Solve in Conjugate Gradient Methods
     [Y4,step4]=cg(conjgradH,conjgrad_bn,n,9.3e-10);
@@ -66,7 +76,7 @@ for n=10:15
     fprintf("Residual 4 = %d\n", res4);
 
     % Solve in GMRES Methods
-    Y5=gmres(gmresH,gmres_bn);
+    Y5=GMRES(gmresH,gmres_bn);
     res5=mse(Y5-X);
     fprintf("Y5=\n");
     disp(Y5);
@@ -77,91 +87,91 @@ for n=10:15
     res_arr1(end+1)=res1;
     res_arr2(end+1)=res2;
     res_arr3(end+1)=res3;
+    res_arr31(end+1)=res31;
     res_arr4(end+1)=res4;
     res_arr5(end+1)=res5;
     step4_arr(end+1)=step4;
 end
 
 % Plot
-subplot(2,3,1);
+subplot(2,2,1);
 plot(n_arr,res_arr1,":",'LineWidth',2);hold on
 plot(n_arr,res_arr2,"-o",'LineWidth',2);hold on
 plot(n_arr,res_arr3,"-.",'LineWidth',2);hold on
+plot(n_arr,res_arr31,"--",'LineWidth',2);hold on
 plot(n_arr,res_arr4,"-*",'LineWidth',2);hold on
-plot(n_arr,res_arr5,"-v",'LineWidth',2);legend('Gauss消去法','Cholesky分解法','Tikhonov正则化法','共轭梯度法','GMRES法');
+plot(n_arr,res_arr5,"-v",'LineWidth',2);
+legend('Gauss消去法', ...
+    'Cholesky分解法', ...
+    'Tikhonov正则化-Gauss消去法', ...
+    'Tikhonov正则化-Cholesky分解法',...
+    '共轭梯度法', ...
+    'GMRES法');
 xlim([10,15]);
-ylim([0,0.001]);
+ylim([0,1E-3]);
 set(gca,'XTick',10:1:15);
 xlabel('n');
 ylabel('Res');
 title('各种求解方法的误差随n的变化关系(1E-03量级)');
 
-subplot(2,3,2);
+subplot(2,2,2);
 plot(n_arr,res_arr1,":",'LineWidth',2);hold on
 plot(n_arr,res_arr2,"-o",'LineWidth',2);hold on
 plot(n_arr,res_arr3,"-.",'LineWidth',2);hold on
+plot(n_arr,res_arr31,"--",'LineWidth',2);hold on
 plot(n_arr,res_arr4,"-*",'LineWidth',2);hold on
-plot(n_arr,res_arr5,"-v",'LineWidth',2);legend('Gauss消去法','Cholesky分解法','Tikhonov正则化法','共轭梯度法','GMRES法');
+plot(n_arr,res_arr5,"-v",'LineWidth',2);
+legend('Gauss消去法', ...
+    'Cholesky分解法', ...
+    'Tikhonov正则化-Gauss消去法', ...
+    'Tikhonov正则化-Cholesky分解法',...
+    '共轭梯度法', ...
+    'GMRES法');
 xlim([10,15]);
-ylim([0,0.01]);
+ylim([0,1]);
 set(gca,'XTick',10:1:15);
 xlabel('n');
 ylabel('Res');
-title('各种求解方法的误差随n的变化关系(1E-02量级)');
+title('各种求解方法的误差随n的变化关系(1E+00量级)');
 
-subplot(2,3,3);
+subplot(2,2,3);
 plot(n_arr,res_arr1,":",'LineWidth',2);hold on
 plot(n_arr,res_arr2,"-o",'LineWidth',2);hold on
 plot(n_arr,res_arr3,"-.",'LineWidth',2);hold on
+plot(n_arr,res_arr31,"--",'LineWidth',2);hold on
 plot(n_arr,res_arr4,"-*",'LineWidth',2);hold on
-plot(n_arr,res_arr5,"-v",'LineWidth',2);legend('Gauss消去法','Cholesky分解法','Tikhonov正则化法','共轭梯度法','GMRES法');
+plot(n_arr,res_arr5,"-v",'LineWidth',2);
+legend('Gauss消去法', ...
+    'Cholesky分解法', ...
+    'Tikhonov正则化-Gauss消去法', ...
+    'Tikhonov正则化-Cholesky分解法',...
+    '共轭梯度法', ...
+    'GMRES法');
 xlim([10,15]);
-ylim([0,0.1]);
+ylim([0,1E03]);
 set(gca,'XTick',10:1:15);
 xlabel('n');
 ylabel('Res');
-title('各种求解方法的误差随n的变化关系(1E-01量级)');
+title('各种求解方法的误差随n的变化关系(1E03量级)');
 
-subplot(2,3,4);
+subplot(2,2,4);
 plot(n_arr,res_arr1,":",'LineWidth',2);hold on
 plot(n_arr,res_arr2,"-o",'LineWidth',2);hold on
 plot(n_arr,res_arr3,"-.",'LineWidth',2);hold on
+plot(n_arr,res_arr31,"--",'LineWidth',2);hold on
 plot(n_arr,res_arr4,"-*",'LineWidth',2);hold on
-plot(n_arr,res_arr5,"-v",'LineWidth',2);legend('Gauss消去法','Cholesky分解法','Tikhonov正则化法','共轭梯度法','GMRES法');
+plot(n_arr,res_arr5,"-v",'LineWidth',2);
+legend('Gauss消去法', ...
+    'Cholesky分解法', ...
+    'Tikhonov正则化-Gauss消去法', ...
+    'Tikhonov正则化-Cholesky分解法',...
+    '共轭梯度法', ...
+    'GMRES法');
 xlim([10,15]);
 ylim([0,1]);
 set(gca,'XTick',10:1:15);
 xlabel('n');
 ylabel('Error');
-title('各种求解方法的误差随n的变化关系(1E+00量级)');
-
-subplot(2,3,5);
-plot(n_arr,res_arr1,":",'LineWidth',2);hold on
-plot(n_arr,res_arr2,"-o",'LineWidth',2);hold on
-plot(n_arr,res_arr3,"-.",'LineWidth',2);hold on
-plot(n_arr,res_arr4,"-*",'LineWidth',2);hold on
-plot(n_arr,res_arr5,"-v",'LineWidth',2);legend('Gauss消去法','Cholesky分解法','Tikhonov正则化法','共轭梯度法','GMRES法');
-xlim([10,15]);
-ylim([0,10]);
-set(gca,'XTick',10:1:15);
-xlabel('n');
-ylabel('Error');
-title('各种求解方法的误差随n的变化关系(1E+01量级)');
-
-subplot(2,3,6);
-plot(n_arr,res_arr1,":",'LineWidth',2);hold on
-plot(n_arr,res_arr2,"-o",'LineWidth',2);hold on
-plot(n_arr,res_arr3,"-.",'LineWidth',2);hold on
-plot(n_arr,res_arr4,"-*",'LineWidth',2);hold on
-plot(n_arr,res_arr5,"-v",'LineWidth',2);legend('Gauss消去法','Cholesky分解法','Tikhonov正则化法','共轭梯度法','GMRES法');
-xlim([10,15]);
-ylim([0,10000000]);
-set(gca,'XTick',10:1:15);
-xlabel('n');
-ylabel('Error');
-title('各种求解方法的误差随n的变化关系(1E+07量级)');
-
-
-sgtitle('不同量级下各种求解方法的性能随矩阵阶数的变化关系图');
+title('各种求解方法的误差随n的变化关系(1E+06量级)');
 
 
