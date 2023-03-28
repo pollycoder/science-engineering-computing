@@ -12,4 +12,5 @@ Compare the error
 2. Accelerations
 3. Newton
 
+Requirements: Error < 1e-7
 
