@@ -1,9 +1,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Direct functions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [x,steps,e,time]=directIter_Conv(fun,x0,tol,max_iter)
+function [x,steps,x_array,e,time]=directIter_Conv(fun,x0,tol,max_iter)
 time=tic;
 ifconv=false;
+x_array=[];
 if nargin<4
     max_iter=1000;
 end
@@ -23,6 +24,7 @@ while e>tol && steps<max_iter
     end
     sol=feval(fun,x0);
     e=abs(sol);
+    x_array(end+1)=x0;
     if e<tol
         ifconv=true;
         break;
