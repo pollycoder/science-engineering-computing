@@ -14,8 +14,8 @@ X4=1;
 X5=1;
 
 % Direct functions
-[X1,step]=directIter_noConv(@cube,X1);
-
+[X1,step1]=directIter_noConv(@cube,X1);
+[X2,step2]=directIter_Conv(@cube,X2);
 
 
 
