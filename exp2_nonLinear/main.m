@@ -10,16 +10,74 @@ clear
 X1=1;
 X2=1;
 X3=1;
-X4=1;
-X5=1;
+X1s=1;
+X2s=1;
+X3s=1;
 
 % Direct functions
-[X1,step1,x1_arr]=directIter_noConv1(@cube,X1);
-[X2,step2,x2_arr]=directIter_noConv2(@cube,X2);
-[X3,step3,x3_arr]=directIter_Conv(@cube,X3);
+fprintf("Direct functions:\n");
+[X1,step1,x1_arr]=directIter(@cube,@noConv1,X1);
+[X2,step2,x2_arr]=directIter(@cube,@noConv2,X2);
+[X3,step3,x3_arr]=directIter(@cube,@conv,X3);
+fprintf("\n");
+
+% Steffensen acceleration
+fprintf("Steffensen acceleration:\n");
+[X1s,step4,x4_arr]=steffen_acc(@cube,@noConv1,X1s);
+[X2s,step5,x5_arr]=steffen_acc(@cube,@noConv2,X2s);
+[X3s,step6,x6_arr]=steffen_acc(@cube,@conv,X3s);
+fprintf("\n");
 
 
+% Plot
+plot(1:step1,x1_arr,":",'LineWidth',1);hold on;
+plot(1:step2,x2_arr,"--",'LineWidth',1);hold on;
+plot(1:step3,x3_arr,"-o",'LineWidth',2);
+hold on;
+plot(1:step4,x4_arr,"-square",'LineWidth',2);
+hold on;
+plot(1:step5,x5_arr,"-diamond",'LineWidth',2);
+hold on;
+plot(1:step6,x6_arr,"-*",'LineWidth',2,'Color','magenta');
+hold on;
+legend('函数1直接迭代', ...
+    '函数2直接迭代', ...
+    '函数3直接迭代', ...
+    '函数1-steffensen加速',...
+    '函数2-steffensen加速', ...
+    '函数3-steffensen加速');
+
+%%%%%%%%%%%%%%%%%%%
 % Original function
+%%%%%%%%%%%%%%%%%%%
 function y=cube(x)
 y=x.^3+2.*x.^2+10.*x-20;
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Functions for iteration
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Function 1: 
+% Not converged, vibrate, 
+% "inf" if x0 is too large
+function y=noConv1(x)
+y=(20-2.*(x.^2)-x.^3)./10;
+end
+
+% Function 2: 
+% Not converged, vibrate
+% But more stable than func1
+function y=noConv2(x)
+y0=20-10*x-2*x^2;
+if sign(y0)==-1
+    y=-power(abs(y0),1/3);
+else
+    y=power(y0,1/3);
+end
+end
+
+% Function 3
+% Converged, iteration: 23
+function y=conv(x)
+y=20/(x^2+2*x+10);
 end
