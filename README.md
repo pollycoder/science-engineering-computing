@@ -9,7 +9,7 @@ Compare the error
 
 ## Experiment 2 Non-linear Equations Solving
 1. Direct function construction
-2. Accelerations
+2. Accelerations --- Steffensen
 3. Newton
 
 Requirements: Error < 1e-7
