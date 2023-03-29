@@ -1,8 +1,9 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Direct functions
-% Converge
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [x,steps,x_array,e,time]=directIter_Conv(fun,x0,tol,max_iter)
+% Caution: Cannot converge
+% Vibrate or close to inf, depending on the initial value
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [x,steps,x_array,e,time]=directIter_noConv1(fun,x0,tol,max_iter)
 time=tic;
 ifconv=false;
 x_array=[];
@@ -17,7 +18,7 @@ sol=feval(fun,x0);
 e=abs(sol);
 while e>tol && steps<max_iter
     steps=steps+1;
-    x0=20/(x0^2+2*x0+10);
+    x0=(20-2.*(x0.^2)-x0.^3)./10;
     sol=feval(fun,x0);
     e=abs(sol);
     x_array(end+1)=x0;
