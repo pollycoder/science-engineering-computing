@@ -1,9 +1,13 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Steffensen acceleration
+% Use steffensen to generate a new iteration function
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [x,steps,x_array,e,time]=steffen_acc(obj_fun,iter_fun,x0,tol,max_iter)
 time=tic;
 ifconv=false;
 x_array=[];
 if nargin<5
-    max_iter=30;
+    max_iter=25;
 end
 if nargin<4
     tol=1E-7;
@@ -31,7 +35,7 @@ end
 x=x0;
 end
 
-
+% Steffensen: process the function
 function x=steffensen(iter_fun,x0)
 x=x0-(iter_fun(x0)-x0).^2./(iter_fun(iter_fun(x0))-2.*iter_fun(x0)+x0);
 end

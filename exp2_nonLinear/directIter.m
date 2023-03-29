@@ -8,7 +8,7 @@ time=tic;
 ifconv=false;
 x_array=[];
 if nargin<5
-    max_iter=30;
+    max_iter=25;
 end
 if nargin<4
     tol=1E-7;

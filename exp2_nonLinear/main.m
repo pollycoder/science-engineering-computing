@@ -30,16 +30,12 @@ fprintf("\n");
 
 
 % Plot
-plot(1:step1,x1_arr,":",'LineWidth',1);hold on;
-plot(1:step2,x2_arr,"--",'LineWidth',1);hold on;
-plot(1:step3,x3_arr,"-o",'LineWidth',2);
-hold on;
-plot(1:step4,x4_arr,"-square",'LineWidth',2);
-hold on;
-plot(1:step5,x5_arr,"-diamond",'LineWidth',2);
-hold on;
-plot(1:step6,x6_arr,"-*",'LineWidth',2,'Color','magenta');
-hold on;
+plot(1:step1,x1_arr,"-",'LineWidth',1,'Color','green');hold on;
+plot(1:step2,x2_arr,"-",'LineWidth',1,'Color','cyan');hold on;
+plot(1:step3,x3_arr,"-o",'LineWidth',2,'Color','black');hold on;
+plot(1:step4,x4_arr,"-square",'LineWidth',2,'Color','blue');hold on;
+plot(1:step5,x5_arr,"-diamond",'LineWidth',2,'Color','red');hold on;
+plot(1:step6,x6_arr,"-*",'LineWidth',2,'Color','magenta');hold on;
 legend('函数1直接迭代', ...
     '函数2直接迭代', ...
     '函数3直接迭代', ...
