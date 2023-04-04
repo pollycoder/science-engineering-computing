@@ -9,15 +9,19 @@ clear
 % Initial result
 X1=1;
 X2=1;
+
 X3=1;
 X1s=1;
 X2s=1;
 X3s=1;
 
+X4=1;
+
 % Direct functions
+% Func 1 and func 2 had vibrations, while func 3 is converged
 fprintf("Direct functions:\n");
-[X1,step1,x1_arr]=directIter(@cube,@noConv1,X1);
-[X2,step2,x2_arr]=directIter(@cube,@noConv2,X2);
+[X1,step1,x1_arr]=directIter(@cube,@noConv1,X1,1E-7,100);
+[X2,step2,x2_arr]=directIter(@cube,@noConv2,X2,1E-7,100);
 [X3,step3,x3_arr]=directIter(@cube,@conv,X3);
 fprintf("\n");
 
@@ -28,20 +32,36 @@ fprintf("Steffensen acceleration:\n");
 [X3s,step6,x6_arr]=steffen_acc(@cube,@conv,X3s);
 fprintf("\n");
 
+% Newton iteration
+fprintf("Newton iteration:\n");
+[X4,step7,x7_arr]=newton(@cube,X4);
+
+
+
 
 % Plot
-plot(1:step1,x1_arr,"-",'LineWidth',1,'Color','green');hold on;
-plot(1:step2,x2_arr,"-",'LineWidth',1,'Color','cyan');hold on;
-plot(1:step3,x3_arr,"-o",'LineWidth',2,'Color','black');hold on;
-plot(1:step4,x4_arr,"-square",'LineWidth',2,'Color','blue');hold on;
-plot(1:step5,x5_arr,"-diamond",'LineWidth',2,'Color','red');hold on;
-plot(1:step6,x6_arr,"-*",'LineWidth',2,'Color','magenta');hold on;
-legend('函数1直接迭代', ...
-    '函数2直接迭代', ...
-    '函数3直接迭代', ...
-    '函数1-steffensen加速',...
-    '函数2-steffensen加速', ...
-    '函数3-steffensen加速');
+subplot(2,1,1);
+plot(0:step1-1,x1_arr,"-x",'LineWidth',1);hold on;
+plot(0:step2-1,x2_arr,"-v",'LineWidth',1);
+legend('函数1直接迭代',...
+       '函数2直接迭代');
+subplot(2,1,2);
+plot(0:step3-1,x3_arr,"-o",'LineWidth',1);hold on;
+plot(0:step4-1,x4_arr,"-square",'LineWidth',1);hold on;
+plot(0:step5-1,x5_arr,"-diamond",'LineWidth',1);hold on;
+plot(0:step6-1,x6_arr,"-*",'LineWidth',1);
+
+% Mark the converged points
+text(step3-1,X3+0.02,{'函数3收敛点','\downarrow'},'Color','red');
+text(step4-1,X1s+0.02,{'函数1加速收敛点','\downarrow'},'Color','red');
+text(step5-1,X2s+0.02,{'函数2加速收敛点','\downarrow'},'Color','red');
+text(step6-1,X3s-0.02,{'\uparrow','函数3加速收敛点'},'Color','red');
+
+% Legend
+legend('函数3直接迭代', ...
+       '函数1-steffensen加速',...
+       '函数2-steffensen加速', ...
+       '函数3-steffensen加速');
 
 %%%%%%%%%%%%%%%%%%%
 % Original function
@@ -77,3 +97,5 @@ end
 function y=conv(x)
 y=20/(x^2+2*x+10);
 end
+
+

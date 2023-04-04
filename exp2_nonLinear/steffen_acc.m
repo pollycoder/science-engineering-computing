@@ -7,7 +7,7 @@ time=tic;
 ifconv=false;
 x_array=[];
 if nargin<5
-    max_iter=25;
+    max_iter=100;
 end
 if nargin<4
     tol=1E-7;
@@ -21,6 +21,7 @@ while e>tol && steps<max_iter
     sol=feval(obj_fun,x0);
     e=abs(sol);
     x_array(end+1)=x0;
+    fprintf("%d\n",x0);
     if e<tol
         ifconv=true;
         break;

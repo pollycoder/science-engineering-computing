@@ -1,27 +1,26 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Direct functions
-% Caution: Cannot converge
-% Vibrate or close to inf, depending on the initial value
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [x,steps,x_array,e,time]=directIter(obj_fun,iter_fun,x0,tol,max_iter)
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Newton iteration
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [x,steps,x_array,e,time]=newton(obj_fun,x0,tol,max_iter)
 time=tic;
 ifconv=false;
 x_array=[];
-if nargin<5
-    max_iter=25;
-end
 if nargin<4
+    max_iter=100;
+end
+if nargin<3
     tol=1E-7;
 end
 steps=0;
 sol=feval(obj_fun,x0);
 e=abs(sol);
+syms x
+y=obj_fun(x);
 while e>tol && steps<max_iter
     steps=steps+1;
-    x0=iter_fun(x0);
+    x0=double(x0-subs(y,x,x0)./subs(diff(y),x,x0));
     sol=feval(obj_fun,x0);
     e=abs(sol);
-    x_array(end+1)=x0;
     fprintf("%d\n",x0);
     if e<tol
         ifconv=true;
