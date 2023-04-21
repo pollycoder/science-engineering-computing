@@ -14,3 +14,7 @@ Compare the error
 
 Requirements: Error < 1e-7
 
+## Experiment 3 Eigenvalue Calculation
+1. Jacobi method
+2. QR method
+
