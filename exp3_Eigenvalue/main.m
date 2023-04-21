@@ -15,7 +15,7 @@ time_ja=[];
 time_qra=[];
 err_ja=[];
 err_qra=[];
-for n=10:10:1000
+for n=10:5:100
     A=diag(repmat(2,1,n))...
     +diag(repmat(-1,1,n-1),1)...
     +diag(repmat(-1,1,n-1),-1);
@@ -40,6 +40,11 @@ for n=10:10:1000
     err_qra(end+1)=norm(real-lambda2);
 
     n_array(end+1)=n;
+
+    % Inverse power method
+    tic
+    [lambda3,times3]=eig_invPow(A,n,e);
+    time_inv=toc;
 end
 
 subplot(1,2,1)
@@ -53,3 +58,8 @@ plot(n_array,err_ja', "-o",'LineWidth',2);hold on;
 plot(n_array,err_qra', "-v",'LineWidth',2);
 legend("Jacobi方法","QR方法");
 title('两种方法的求解误差随阶数变化关系图');
+
+err_qra=err_qra';
+err_ja=err_ja';
+time_ja=time_ja';
+time_qra=time_qra';
