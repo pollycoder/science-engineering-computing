@@ -23,3 +23,9 @@ Requirements: Error < 1e-7
 2. Piecewise linear interpolation
 3. Cubic spline interpolation
 
+## Experiment 5 Function Approximation
+1. Best square approximation
+2. Tchebychev series truncation
+3. Lagrange remainder minimization
+
+
