@@ -6,7 +6,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 clc
 clear workspace
-n=3;
+n=4;
 func=@(x)x.^2.*log(2+x);
 
 a_sqr=sqr_approx(n,func);
