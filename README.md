@@ -28,4 +28,12 @@ Requirements: Error < 1e-7
 2. Tchebychev series truncation
 3. Lagrange remainder minimization
 
+## Experiment 6 Numerical Integration
+1. 5-point-Gauss-Legendre
+2. Romberg, Error<1e-7
+
+## Experiment 7 ODE Numerical Solution
+1. Explicit Runge-Kutta in 4 orders (ode45 without 5-order correction)
+2. Implicit Runge-Kutta in 4 orders
+
 
