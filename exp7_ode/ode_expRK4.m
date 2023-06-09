@@ -5,7 +5,7 @@
 function [T1, Y1] = ode_expRK4(odefun, tspan, y0)
 t0 = tspan(1);              
 tfinal = tspan(end);        
-hmax = 1e-4 * (tfinal - t0); 
+hmax = 1e-3 * (tfinal - t0); 
 T = t0;
 Y = y0.';
 t = t0;        

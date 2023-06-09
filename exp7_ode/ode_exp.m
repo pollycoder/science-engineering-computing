@@ -31,21 +31,23 @@ result=(y1.*y1+y2.*y2)/2;
 y3=X(2,:);
 y4=X(1,:);
 real=(y3.*y3+y4.*y4)/2;
+error_p=y1-y3;
+error_q=y2-y4;
 
 figure
 sgtitle(['Comparison between the analytical solution and ODE solver (',solver,')']);
-subplot(2,1,1)
+subplot(3,1,1)
 plot(t,y(1,:),"Color",'r','LineWidth',1.5);hold on;
 plot(t,y(2,:),"Color",'m','LineWidth',1.5);hold on;
-plot(t,X(1,:),"Color",'g','LineWidth',1.5,'LineStyle','--');hold on;
-plot(t,X(2,:),"Color",'c','LineWidth',1.5,'LineStyle','--');
+plot(t,X(2,:),"Color",'g','LineWidth',1.5,'LineStyle','--');hold on;
+plot(t,X(1,:),"Color",'c','LineWidth',1.5,'LineStyle','--');
 xlabel('t');
 ylabel('velocity');
 ylim([-1,1]);
 legend('p','q','p-baseline','q-baseline');
 title('Velocity and displacement (p and q)');
 
-subplot(2,1,2)
+subplot(3,1,2)
 plot(t,result,"Color",'b','LineWidth',1.5,'LineStyle','-');hold on;
 plot(t,real,"Color",'r','LineWidth',1.5,'LineStyle','-');
 xlabel('t');
@@ -58,6 +60,21 @@ end
 legend(solver,'baseline');
 txt=title('\textbf{Energy ($\frac{p^2+q^2}{2}$)}');
 set(txt,'Interpreter','latex');
+
+subplot(3,1,3)
+plot(t,error_p,"Color",'b','LineWidth',1.5,'LineStyle','-');hold on;
+plot(t,error_q,"Color",'r','LineWidth',1.5,'LineStyle','-');
+xlabel('t');
+ylabel('error');
+if isequal(odesolver,@ode_impRK4)
+    ylim([-0.1,0.1]);
+elseif isequal(odesolver,@ode15s)
+    ylim([-1e-3,1e-3]);
+elseif isequal(odesolver,@ode_expRK4)
+    ylim([-1e-4,1e-4]);
+end
+legend('error-p','error-q');
+title('Error');
 end
 
 
